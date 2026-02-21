@@ -5,11 +5,11 @@ import { MOVEMENT } from '../core/Constants.js';
  * Fighter represents a playable character.
  * Owns visual model, physics state, and input processing.
  *
- * Sprint 1: simplified state with boolean flags.
+ * Sprint 2: added opponent awareness, auto-rotation, and collision.
  * FighterStateMachine will be introduced in Sprint 3.
  */
 export class Fighter {
-  constructor(scene, keyMap, colorScheme = 'player1') {
+  constructor(scene, keyMap, colorScheme = 'player1', startX = 0) {
     this.keyMap = keyMap;
 
     // Visual model
@@ -17,20 +17,25 @@ export class Fighter {
     scene.add(this.model.group);
 
     // Physics state
-    this.position = { x: 0, y: 0, z: 0 };
+    this.position = { x: startX, y: 0, z: 0 };
     this.velocity = { x: 0, y: 0, z: 0 };
 
     // State flags
     this.isGrounded = true;
     this.isCrouching = false;
+    this.facingRight = colorScheme === 'player1';
 
     this._syncModelPosition();
   }
 
-  update(dt, inputManager) {
+  update(dt, inputManager, opponent = null) {
     this._handleInput(dt, inputManager);
     this._applyGravity(dt);
     this._applyMovement(dt);
+    if (opponent) {
+      this._handleCollisionWithOpponent(opponent);
+      this._handleAutoRotation(opponent);
+    }
     this._enforceArenaBounds();
     this._syncModelPosition();
   }
@@ -59,6 +64,7 @@ export class Fighter {
     }
 
     // Horizontal movement — not while crouching
+    // Controls are relative to the SCREEN, not the fighter's facing direction
     if (!this.isCrouching) {
       if (inputManager.isKeyDown(keys.left)) {
         this.velocity.x = -MOVEMENT.walkSpeed;
@@ -69,6 +75,33 @@ export class Fighter {
       }
     } else {
       this.velocity.x = 0;
+    }
+  }
+
+  /** Rotate fighter to always face the opponent */
+  _handleAutoRotation(opponent) {
+    const diff = opponent.position.x - this.position.x;
+    if (diff > 0.01) {
+      this.facingRight = true;
+      this.model.group.rotation.y = 0;
+    } else if (diff < -0.01) {
+      this.facingRight = false;
+      this.model.group.rotation.y = Math.PI;
+    }
+    // If diff is near zero, keep current facing direction
+  }
+
+  /** Prevent fighters from overlapping — symmetric pushback */
+  _handleCollisionWithOpponent(opponent) {
+    const dx = this.position.x - opponent.position.x;
+    const distance = Math.abs(dx);
+    const minDistance = 0.8; // approximate sum of body half-widths
+
+    if (distance < minDistance && distance > 0.001) {
+      const pushDirection = Math.sign(dx);
+      const overlap = minDistance - distance;
+      // Push both fighters equally (half the overlap each)
+      this.position.x += pushDirection * (overlap / 2 + MOVEMENT.pushbackOnOverlap);
     }
   }
 
@@ -106,8 +139,6 @@ export class Fighter {
     this.model.group.position.x = this.position.x;
     this.model.group.position.z = this.position.z;
 
-    // When grounded and not crouching, model Y = groundOffset
-    // When airborne, add position.y to the base offset
     if (this.isGrounded) {
       if (!this.isCrouching) {
         this.model.group.position.y = this.model.groundOffset;

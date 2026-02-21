@@ -4,6 +4,8 @@ import { CAMERA } from '../core/Constants.js';
 /**
  * SceneManager creates and manages the Three.js rendering pipeline:
  * renderer, camera, lights, and window resize handling.
+ *
+ * Sprint 2: added dynamic camera that tracks both fighters.
  */
 export class SceneManager {
   constructor(canvas) {
@@ -51,6 +53,33 @@ export class SceneManager {
     // Ambient fill light
     const ambientLight = new THREE.AmbientLight(0x404060, 0.6);
     this.scene.add(ambientLight);
+  }
+
+  /**
+   * Dynamic camera that follows the midpoint between two fighters.
+   * Zooms out as they separate, zooms in as they approach.
+   * Uses lerp smoothing for fluid motion.
+   */
+  updateCamera(pos1, pos2) {
+    // Midpoint between fighters on X axis
+    const midX = (pos1.x + pos2.x) / 2;
+
+    // Distance between fighters determines zoom level
+    const fighterDistance = Math.abs(pos2.x - pos1.x);
+    const targetZ = Math.max(
+      CAMERA.minDistance,
+      Math.min(
+        CAMERA.maxDistance,
+        CAMERA.baseDistance + fighterDistance * CAMERA.distanceMultiplier
+      )
+    );
+
+    // Smooth camera movement via lerp
+    this.camera.position.x += (midX - this.camera.position.x) * CAMERA.smoothing;
+    this.camera.position.z += (targetZ - this.camera.position.z) * CAMERA.smoothing;
+
+    // Always look at the midpoint at torso height
+    this.camera.lookAt(this.camera.position.x, CAMERA.lookAtHeight, 0);
   }
 
   _onResize() {

@@ -12,7 +12,7 @@ o progress.md manualmente com o estado final e próximos passos.
 
 ## Controle de Versão do Projeto
 
-**Versão atual: 0.1.0** (Sprint 1 — cena 3D + movimento básico)
+**Versão atual: 0.2.0** (Sprint 2 — Player 2 + câmera dinâmica)
 
 ### Formato
 Semantic Versioning: `MAJOR.MINOR.PATCH`
@@ -36,3 +36,4 @@ Semantic Versioning: `MAJOR.MINOR.PATCH`
 |--------|------|-----------|
 | 0.0.0  | 2026-02-21 | Projeto criado — fase de planejamento |
 | 0.1.0  | 2026-02-21 | Sprint 1: cena 3D, arena, robô azul com movimento (WASD), pulo e agachamento |
+| 0.2.0  | 2026-02-21 | Sprint 2: Player 2 (vermelho), auto-rotação, colisão entre fighters, câmera dinâmica |

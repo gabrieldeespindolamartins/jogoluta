@@ -1,6 +1,6 @@
 // Movement physics constants
 export const MOVEMENT = {
-  walkSpeed: 5,          // units per second
+  walkSpeed: 5,           // units per second
   jumpForce: 8,          // Y-axis jump impulse
   gravity: -20,          // gravity applied per second
   groundY: 0,            // Y position of the ground
@@ -70,4 +70,10 @@ export const PLAYER2_KEYS = {
   right: 'ArrowRight',
   jump: 'ArrowUp',
   crouch: 'ArrowDown'
+};
+
+// Spawn positions for each player
+export const SPAWN_POSITIONS = {
+  player1: { x: -3, z: 0 },
+  player2: { x: 3, z: 0 }
 };

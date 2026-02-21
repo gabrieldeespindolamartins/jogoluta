@@ -51,3 +51,55 @@
 - Testar no browser: `npm run dev` → WASD para mover o robô azul
 
 ---
+
+## Sessão 2026-02-21 [manual] — v0.1.0
+
+### Feito
+- Sprint 1 testado com sucesso no browser (`npm run dev`)
+- Jogo funcional: robô azul visível na arena, WASD respondendo corretamente
+- Adicionada regra de versionamento ao CLAUDE.md (Semantic Versioning)
+- Commit e push do Sprint 1 para GitHub (622a8e3)
+- Commit e push do initial commit (3305557)
+- Repositório git inicializado e configurado com remote origin
+
+### Decisões
+- Versionamento segue Semantic Versioning (MAJOR.MINOR.PATCH)
+- Versão registrada em 3 locais: CLAUDE.md, progress.md, package.json
+- Changelog resumido mantido na tabela do CLAUDE.md
+- .gitignore exclui node_modules, dist, arquivos temporários e binários (.rar, .zip)
+
+### Problemas
+- Nenhum
+
+### Próximos passos
+- Sprint 2: Adicionar Player 2 (robô vermelho) com controles de setas
+- Sprint 2: Câmera dinâmica que segue ambos os lutadores (zoom in/out)
+- Sprint 3: State machine (FighterStateMachine.js) e primeiro ataque (soco)
+
+---
+
+## Sessão 2026-02-21 — v0.2.0
+
+### Feito
+- Sprint 2 completo: Player 2 e câmera dinâmica
+- Constants.js: adicionado SPAWN_POSITIONS (player1 x=-3, player2 x=3)
+- Fighter.js: adicionado suporte a oponente, auto-rotação (fighters olham um para o outro), colisão/pushback entre fighters, posição inicial configurável
+- SceneManager.js: câmera dinâmica com tracking de ponto médio, zoom baseado em distância, lerp smoothing
+- Game.js: instanciação de Player 2 (vermelho, setas), game loop atualizado com oponente e câmera
+- Build verificado com sucesso (vite build — 0 erros, 13 módulos)
+
+### Decisões
+- Colisão entre fighters: pushback simétrico quando distância < 0.8 unidades
+- Auto-rotação com deadzone de 0.01 para evitar flickering quando na mesma posição
+- Câmera lookAt usa a posição X interpolada (não o midpoint direto) para suavidade
+- Controles são relativos à TELA, não à direção do lutador
+
+### Problemas
+- Nenhum
+
+### Próximos passos
+- Sprint 3: State machine (FighterStateMachine.js) e primeiro ataque (soco)
+- Sprint 4: Sistema de hitbox/hurtbox e dano
+- Testar: `npm run dev` → WASD (P1) + Setas (P2), câmera segue ambos
+
+---
