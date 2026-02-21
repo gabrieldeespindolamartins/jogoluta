@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.auto-context-checkpoint
+Untitled
+*.rar
+*.zip
