@@ -12,7 +12,7 @@ o progress.md manualmente com o estado final e próximos passos.
 
 ## Controle de Versão do Projeto
 
-**Versão atual: 0.0.0** (pré-implementação)
+**Versão atual: 0.1.0** (Sprint 1 — cena 3D + movimento básico)
 
 ### Formato
 Semantic Versioning: `MAJOR.MINOR.PATCH`
@@ -35,3 +35,4 @@ Semantic Versioning: `MAJOR.MINOR.PATCH`
 | Versão | Data | Descrição |
 |--------|------|-----------|
 | 0.0.0  | 2026-02-21 | Projeto criado — fase de planejamento |
+| 0.1.0  | 2026-02-21 | Sprint 1: cena 3D, arena, robô azul com movimento (WASD), pulo e agachamento |
